@@ -94,7 +94,7 @@ Transaksi Izin Keluar
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="9">
+                        <td colspan="10">
                             <div class="alert alert-info text-center" role="alert">
                                 Daftar Izin Masih Kosong
                             </div>
