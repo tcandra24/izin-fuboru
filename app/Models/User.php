@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         $this->attributes['nama'] = strtolower($value);
     }
+
+    public function getJabatanAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    public function setJabatanAttribute($value)
+    {
+        $this->attributes['jabatan'] = strtolower($value);
+    }
 }
