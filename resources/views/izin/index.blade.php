@@ -109,11 +109,19 @@ Izin Keluar
                             <td class="border-bottom-0">
                                 <div class="d-flex align-items-center gap-2">
                                     <button class="btn btn-primary m-1 btn-approve" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Approve</button>
-
                                     <form id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
                                         @csrf
+                                        <input type="hidden" name="is_approve" value="1">
                                         <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
                                     </form>
+                                    @if($izin->status === 'T2')
+                                        <button class="btn btn-danger m-1 btn-reject" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Tolak</button>
+                                        <form id="form-reject-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
+                                            @csrf
+                                            <input type="hidden" name="is_approve" value="0">
+                                            <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -163,6 +171,27 @@ Izin Keluar
       }).then((result) => {
         if (result.isConfirmed) {
             $('#form-approve-izin-' + kode).submit()
+        }
+      })
+
+    })
+
+    $('.btn-reject').on('click', function(){
+      const kode = $(this).attr('data-kode')
+      const keperluan = $(this).attr('data-keperluan')
+      const keterangan = $(this).attr('data-keterangan')
+
+      Swal.fire({
+        title: `Yakin Tolak Izin ${keperluan} ?`,
+        text: keterangan,
+        type: "warning",
+        showCancelButton: !0,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        closeOnConfirm: !1
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $('#form-reject-izin-' + kode).submit()
         }
       })
 

@@ -21,14 +21,19 @@ class IzinController extends Controller
     public function update(Request $request)
     {
         try {
-
-            DB::transaction(function() use ($request){
+            $isApprove = (int)$request->is_approve;
+            DB::transaction(function() use ($request, $isApprove){
                 $kodeIzin = $request->kode_izin;
+
                 $keluarIzin = KeluarIzin::select('kode_izin', 'status', 'keperluan', 'keterangan', 'create_by')->where('kode_izin', $kodeIzin)->first();
 
                 $statusBaru = '';
                 if($keluarIzin->status === 'T2'){
-                    $statusBaru = 'A';
+                    if($isApprove){
+                        $statusBaru = 'A';
+                    } else {
+                        $statusBaru = 'C';
+                    }
                 }elseif($keluarIzin->status === 'T3'){
                     $statusBaru = 'C';
                 }
@@ -49,7 +54,11 @@ class IzinController extends Controller
                 ]);
             });
 
-            return redirect()->to('/izin-keluar')->with('success', 'Izin Berhasil Diapprove');
+            if ($isApprove){
+                return redirect()->to('/izin-keluar')->with('success', 'Izin Berhasil Diapprove');
+            }else {
+                return redirect()->to('/izin-keluar')->with('success', 'Izin Berhasil DiTolak');
+            }
         } catch (\Exception $e) {
             return redirect()->to('/izin-keluar')->with('error', $e->getMessage());
         }
