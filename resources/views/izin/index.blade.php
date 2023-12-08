@@ -51,7 +51,7 @@ Izin Keluar
                     <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Keperluan</h6>
                     </th>
-                    <th class="border-bottom-0">
+                    <th class="border-bottom-0" colspan="2">
                         <h6 class="fw-semibold mb-0">Keterangan</h6>
                     </th>
                     <th class="border-bottom-0">
@@ -92,35 +92,72 @@ Izin Keluar
                                 <p class="mb-0 fw-normal">{{ $izin->keterangan }}</p>
                             </td>
                             <td class="border-bottom-0">
+                                @isset($izin->kembali)
+                                    @if($izin->kembali)
+                                        <span class="badge rounded-pill bg-warning text-white fw-bold">Kembali</span>
+                                    @else
+                                        <span class="badge rounded-pill bg-warning text-white fw-bold">Tidak Kembali</span>
+                                    @endif
+                                @else
+                                    <span class="badge rounded-pill bg-warning text-white fw-bold">Status Tidak Ditemukan</span>
+                                @endisset
+                            </td>
+                            <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">{{ $izin->pengguna_approval_1->nama ?? '-' }}</p>
                             </td>
                             <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">{{ $izin->pengguna_approval_2->nama ?? '-' }}</p>
                             </td>
                             <td class="border-bottom-0">
-                                @if($izin->status === 'T2')
-                                    <span class="badge rounded-pill bg-info text-white fw-bold">Approve Keluar</span>
+                                @if($izin->status === 'T1')
+                                    <span class="badge rounded-pill bg-info text-white fw-bold">Approve Keluar (HRGA)</span>
+                                @elseif($izin->status === 'T2')
+                                    <span class="badge rounded-pill bg-info text-white fw-bold">Approve Keluar (Satpam)</span>
                                 @elseif($izin->status === 'T3')
-                                    <span class="badge rounded-pill bg-info text-white fw-bold">Approve Masuk</span>
+                                    <span class="badge rounded-pill bg-info text-white fw-bold">Approve Masuk (Satpam)</span>
                                 @else
                                     <span class="badge rounded-pill bg-info text-white fw-bold">Status Tidak Ditemukan</span>
                                 @endif
                             </td>
                             <td class="border-bottom-0">
                                 <div class="d-flex align-items-center gap-2">
-                                    <button class="btn btn-primary m-1 btn-approve" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Approve</button>
-                                    <form id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
-                                        @csrf
-                                        <input type="hidden" name="is_approve" value="1">
-                                        <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
-                                    </form>
-                                    @if($izin->status === 'T2')
-                                        <button class="btn btn-danger m-1 btn-reject" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Tolak</button>
-                                        <form id="form-reject-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
+                                    @if(strtolower(Auth::user()->jabatan) === 'satpam')
+                                        <button class="btn btn-primary m-1 btn-approve" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Approve</button>
+                                        <form id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
                                             @csrf
-                                            <input type="hidden" name="is_approve" value="0">
+                                            <input type="hidden" name="is_approve" value="1">
+                                            <input type="hidden" name="approve_mode" value="satpam">
                                             <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
                                         </form>
+                                        @if($izin->status === 'T2')
+                                            <button class="btn btn-danger m-1 btn-reject" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Tolak</button>
+                                            <form id="form-reject-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
+                                                @csrf
+                                                <input type="hidden" name="is_approve" value="0">
+                                                <input type="hidden" name="approve_mode" value="satpam">
+                                                <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
+                                            </form>
+                                        @endif
+                                    @elseif(strtolower(Auth::user()->jabatan) === 'hrga')
+                                        <a href="/izin-keluar/{{ str_replace('/', '-', $izin->kode_izin) }}/edit" class="btn btn-primary m-1">Approve</a>
+                                    @else
+                                        <a href="/izin-keluar/{{ str_replace('/', '-', $izin->kode_izin) }}/edit" class="btn btn-primary m-1">Approve (HRGA)</a>
+                                        <button class="btn btn-primary m-1 btn-approve" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Approve (Satpam)</button>
+                                        <form id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
+                                            @csrf
+                                            <input type="hidden" name="is_approve" value="1">
+                                            <input type="hidden" name="approve_mode" value="satpam">
+                                            <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
+                                        </form>
+                                        @if($izin->status === 'T2')
+                                            <button class="btn btn-danger m-1 btn-reject" data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}" data-keterangan="{{ $izin->keterangan }}" data-keperluan="{{ $izin->keperluan }}">Tolak (Satpam)</button>
+                                            <form id="form-reject-izin-{{ str_replace('/', '-', $izin->kode_izin) }}" method="POST" action=" {{ url('/izin-keluar/') }}">
+                                                @csrf
+                                                <input type="hidden" name="is_approve" value="0">
+                                                <input type="hidden" name="approve_mode" value="satpam">
+                                                <input type="hidden" name="kode_izin" value="{{ $izin->kode_izin }}">
+                                            </form>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
@@ -128,7 +165,7 @@ Izin Keluar
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="11">
+                        <td colspan="12">
                             <div class="alert alert-info text-center" role="alert">
                                 Daftar Izin Masih Kosong
                             </div>

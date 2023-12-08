@@ -33,7 +33,7 @@ Transaksi Izin Keluar
                         <h6 class="fw-semibold mb-0">Keperluan</h6>
                     </th>
                     <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0">Keterangan</h6>
+                        <h6 class="fw-semibold mb-0" colspan="2">Keterangan</h6>
                     </th>
                     <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Approval 1</h6>
@@ -70,6 +70,17 @@ Transaksi Izin Keluar
                                 <p class="mb-0 fw-normal">{{ $izin->keterangan }}</p>
                             </td>
                             <td class="border-bottom-0">
+                                @isset($izin->kembali)
+                                    @if($izin->kembali)
+                                        <span class="badge rounded-pill bg-warning text-white fw-bold">Kembali</span>
+                                    @else
+                                        <span class="badge rounded-pill bg-warning text-white fw-bold">Tidak Kembali</span>
+                                    @endif
+                                @else
+                                    <span class="badge rounded-pill bg-warning text-white fw-bold">Status Tidak Ditemukan</span>
+                                @endisset
+                            </td>
+                            <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">{{ $izin->pengguna_approval_1->nama ?? '-' }}</p>
                             </td>
                             <td class="border-bottom-0">
@@ -94,7 +105,7 @@ Transaksi Izin Keluar
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="10">
+                        <td colspan="11">
                             <div class="alert alert-info text-center" role="alert">
                                 Daftar Izin Masih Kosong
                             </div>

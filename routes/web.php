@@ -28,6 +28,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/transactions/izin-keluar', [ App\Http\Controllers\TransactionsApprovalController::class, 'index' ])
     ->middleware('permission:transaction-izin-keluar.index');
 
+    Route::get('/izin-keluar/{kodeIzin}/edit', [ App\Http\Controllers\IzinController::class, 'edit' ])
+    ->middleware('permission:izin-keluar.edit');
+
     Route::get('/izin-keluar', [ App\Http\Controllers\IzinController::class, 'index' ])
     ->middleware('permission:izin-keluar.index');
 

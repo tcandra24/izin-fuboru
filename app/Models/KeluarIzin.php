@@ -12,7 +12,9 @@ class KeluarIzin extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'approval_1',
         'approval_2',
+        'kembali',
     ];
 
     public function pengguna_approval_1()
