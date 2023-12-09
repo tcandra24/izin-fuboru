@@ -34,6 +34,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/izin-keluar', [ App\Http\Controllers\IzinController::class, 'index' ])
     ->middleware('permission:izin-keluar.index');
 
+    Route::get('/profile/change-password', [ App\Http\Controllers\Profile\ChangePasswordController::class, 'index' ])
+    ->middleware('permission:change-password.index');
+
+    Route::patch('/profile/change-password', [ App\Http\Controllers\Profile\ChangePasswordController::class, 'update' ]);
+
     Route::post('/izin-keluar', [ App\Http\Controllers\IzinController::class, 'update' ]);
 
     Route::get('/log-approval', [ App\Http\Controllers\LogApprovalController::class, 'index' ])
