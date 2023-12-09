@@ -45,32 +45,37 @@ class IzinController extends Controller
             if($request->approve_mode === 'satpam') {
                 DB::transaction(function() use ($request, $isApprove){
                     $kodeIzin = $request->kode_izin;
-                    $keluarIzin = KeluarIzin::select('kode_izin', 'status', 'keperluan', 'keterangan', 'create_by')->where('kode_izin', $kodeIzin)->first();
+                    $keluarIzin = KeluarIzin::select('kode_izin', 'status', 'keperluan', 'keterangan', 'create_by', 'kembali')->where('kode_izin', $kodeIzin)->first();
 
                     $statusBaru = '';
                     if($keluarIzin->status === 'T2'){
                         if($isApprove){
-                            $statusBaru = 'A';
+                            if($keluarIzin->kembali){
+                                $statusBaru = 'C';
+                            } else {
+                                $statusBaru = 'A';
+                            }
                         } else {
                             $statusBaru = 'C';
                         }
+
                     }elseif($keluarIzin->status === 'T3'){
                         $statusBaru = 'C';
                     }
 
                     KeluarIzin::where('kode_izin', $kodeIzin)->update([
-                        'approval_2' => Auth::user()->kode,
-                        'status' => $statusBaru
+                        'approval_2'    => Auth::user()->kode,
+                        'status'        => $statusBaru
                     ]);
 
                     LogApproval::create([
                         'code_approval' => $keluarIzin->kode_izin,
                         'user_app_code' => $keluarIzin->create_by,
-                        'title' => $keluarIzin->keperluan,
-                        'description' => $keluarIzin->keterangan,
-                        'old_status' => $keluarIzin->status,
-                        'new_status' => $statusBaru,
-                        'user_id' => Auth::user()->id
+                        'title'         => $keluarIzin->keperluan,
+                        'description'   => $keluarIzin->keterangan,
+                        'old_status'    => $keluarIzin->status,
+                        'new_status'    => $statusBaru,
+                        'user_id'       => Auth::user()->id
                     ]);
                 });
 
