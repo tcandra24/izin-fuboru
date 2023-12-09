@@ -51,9 +51,9 @@ class IzinController extends Controller
                     if($keluarIzin->status === 'T2'){
                         if($isApprove){
                             if($keluarIzin->kembali){
-                                $statusBaru = 'C';
-                            } else {
                                 $statusBaru = 'A';
+                            } else {
+                                $statusBaru = 'C';
                             }
                         } else {
                             $statusBaru = 'C';
