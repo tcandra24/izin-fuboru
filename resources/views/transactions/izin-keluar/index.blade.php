@@ -32,8 +32,8 @@ Transaksi Izin Keluar
                     <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Keperluan</h6>
                     </th>
-                    <th class="border-bottom-0">
-                        <h6 class="fw-semibold mb-0" colspan="2">Keterangan</h6>
+                    <th class="border-bottom-0" colspan="2">
+                        <h6 class="fw-semibold mb-0">Keterangan</h6>
                     </th>
                     <th class="border-bottom-0">
                         <h6 class="fw-semibold mb-0">Approval 1</h6>
