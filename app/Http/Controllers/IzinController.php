@@ -12,16 +12,23 @@ use App\Models\LogApproval;
 
 class IzinController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if(strtolower(Auth::user()->jabatan) === 'satpam') {
-            $keluarIzin = KeluarIzin::where('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC')->paginate(10);
+            $keluarIzin = KeluarIzin::where('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC');
         } elseif(strtolower(Auth::user()->jabatan) === 'hrga') {
-            $keluarIzin = KeluarIzin::where('status', 'T1')->orderBy('create_date', 'DESC')->paginate(10);
+            $keluarIzin = KeluarIzin::where('status', 'T1')->orderBy('create_date', 'DESC');
         } else {
             // Jabatan Admin
-            $keluarIzin = KeluarIzin::where('status', 'T1')->where('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC')->paginate(10);
+            $keluarIzin = KeluarIzin::where('status', 'T1')->where('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC');
         }
+
+        if($request->has('start_date') && $request->has('end_date')){
+            $keluarIzin = $keluarIzin->whereDate('create_date', '>=', $request->start_date)->whereDate('create_date', '<=', $request->end_date);
+        }
+
+        $keluarIzin = $keluarIzin->orderBy('create_date', 'DESC')->paginate(10);
+
         return view('izin.index', [ 'keluarIzin' => $keluarIzin ]);
     }
 
