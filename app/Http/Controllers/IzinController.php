@@ -23,8 +23,12 @@ class IzinController extends Controller
             $keluarIzin = KeluarIzin::where('status', 'T1')->where('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC');
         }
 
-        if($request->has('start_date') && $request->has('end_date')){
-            $keluarIzin = $keluarIzin->whereDate('create_date', '>=', $request->start_date)->whereDate('create_date', '<=', $request->end_date);
+        if(isset($request->start_date)){
+            $keluarIzin = $keluarIzin->whereDate('create_date', '>=', $request->start_date);
+        }
+
+        if(isset($request->end_date)){
+            $keluarIzin = $keluarIzin->whereDate('create_date', '<=', $request->end_date);
         }
 
         $keluarIzin = $keluarIzin->orderBy('create_date', 'DESC')->paginate(10);

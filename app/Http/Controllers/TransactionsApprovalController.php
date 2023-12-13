@@ -15,8 +15,12 @@ class TransactionsApprovalController extends Controller
     {
 
         $keluarIzin = KeluarIzin::where('kode_izin', '<>', '');
-        if($request->has('start_date') && $request->has('end_date')){
-            $keluarIzin = $keluarIzin->whereDate('create_date', '>=', $request->start_date)->whereDate('create_date', '<=', $request->end_date);
+        if(isset($request->start_date)){
+            $keluarIzin = $keluarIzin->whereDate('create_date', '>=', $request->start_date);
+        }
+
+        if(isset($request->end_date)){
+            $keluarIzin = $keluarIzin->whereDate('create_date', '<=', $request->end_date);
         }
 
         $keluarIzin = $keluarIzin->orderBy('create_date', 'DESC')->paginate(10);
@@ -26,13 +30,16 @@ class TransactionsApprovalController extends Controller
 
     public function pdf(Request $request)
     {
-        // $izinKeluar = KeluarIzin::where('kode_izin', '<>', '');
-        // if($request->has('start_date') && $request->has('end_date')){
-            // $izinKeluar = $izinKeluar->whereDate('create_date', '>=', $request->start_date)->whereDate('create_date', '<=', $request->end_date);
-        // }
+        $izinKeluar = KeluarIzin::where('kode_izin', '<>', '');
+        if(isset($request->start_date)){
+            $izinKeluar = $izinKeluar->whereDate('create_date', '>=', $request->start_date);
+        }
 
-        // $izinKeluar = $izinKeluar->orderBy('create_date', 'DESC')->get();
-        $izinKeluar = KeluarIzin::all();
+        if(isset($request->end_date)){
+            $izinKeluar = $izinKeluar->whereDate('create_date', '<=', $request->end_date);
+        }
+
+        $izinKeluar = $izinKeluar->orderBy('create_date', 'DESC')->get();
         $dateStart = $request->start_date;
         $dateEnd = $request->end_date;
 
@@ -48,7 +55,7 @@ class TransactionsApprovalController extends Controller
 
     private function getFileName($request)
     {
-        if($request->has('start_date') && $request->has('end_date')){
+        if(isset($request->start_date) && isset($request->end_date)){
             return 'izin keluar : '.$request->start_date.' — '.$request->end_date;
         }
 
