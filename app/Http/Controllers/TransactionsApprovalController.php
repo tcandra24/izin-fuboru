@@ -26,13 +26,13 @@ class TransactionsApprovalController extends Controller
 
     public function pdf(Request $request)
     {
-        $izinKeluar = KeluarIzin::where('kode_izin', '<>', '');
+        // $izinKeluar = KeluarIzin::where('kode_izin', '<>', '');
+        // if($request->has('start_date') && $request->has('end_date')){
+            // $izinKeluar = $izinKeluar->whereDate('create_date', '>=', $request->start_date)->whereDate('create_date', '<=', $request->end_date);
+        // }
 
-        if($request->has('start_date') && $request->has('end_date')){
-            $izinKeluar = $izinKeluar->whereDate('create_date', '>=', $request->start_date)->whereDate('create_date', '<=', $request->end_date);
-        }
-
-        $izinKeluar = $izinKeluar->orderBy('create_date', 'DESC')->get();
+        // $izinKeluar = $izinKeluar->orderBy('create_date', 'DESC')->get();
+        $izinKeluar = KeluarIzin::all();
         $dateStart = $request->start_date;
         $dateEnd = $request->end_date;
 
