@@ -56,16 +56,12 @@ class IzinController extends Controller
             if($request->approve_mode === 'satpam') {
                 DB::transaction(function() use ($request, $isApprove){
                     $kodeIzin = $request->kode_izin;
-                    $keluarIzin = KeluarIzin::select('kode_izin', 'status', 'keperluan', 'keterangan', 'create_by', 'kembali')->where('kode_izin', $kodeIzin)->first();
+                    $keluarIzin = KeluarIzin::select('kode_izin', 'status', 'keperluan', 'keterangan', 'create_by')->where('kode_izin', $kodeIzin)->first();
 
                     $statusBaru = '';
                     if($keluarIzin->status === 'T2'){
                         if($isApprove){
-                            if($keluarIzin->kembali){
-                                $statusBaru = 'A';
-                            } else {
-                                $statusBaru = 'C';
-                            }
+                            $statusBaru = 'A';
                         } else {
                             $statusBaru = 'C';
                         }
@@ -103,7 +99,6 @@ class IzinController extends Controller
                     KeluarIzin::where('kode_izin', $kodeIzin)->update([
                         'approval_1' => Auth::user()->kode,
                         'status' => 'T2',
-                        'kembali' => $request->kembali,
                     ]);
 
                     LogApproval::create([

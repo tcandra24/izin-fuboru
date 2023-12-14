@@ -78,11 +78,11 @@ Approve HRGA
                     <div class="mb-3 w-100">
                         <div class="d-flex" style="gap: 15px;">
                             <div class="form-check">
-                                <input class="form-check-input" name="kembali" value="1" type="radio" aria-describedby="term-condition" checked>
+                                <input class="form-check-input" name="kembali" value="1" type="radio" aria-describedby="term-condition" disabled {{ $keluarIzin->kembali == 1 ? 'checked' : '' }}>
                                 <label for="term-condition" class="form-label">Kembali</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" name="kembali" value="0" type="radio" aria-describedby="term-condition">
+                                <input class="form-check-input" name="kembali" value="0" type="radio" aria-describedby="term-condition" disabled {{ $keluarIzin->kembali == 0 ? 'checked' : '' }}>
                                 <label for="term-condition" class="form-label">Tidak Kembali</label>
                             </div>
                         </div>
