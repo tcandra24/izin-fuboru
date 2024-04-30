@@ -215,35 +215,55 @@
                                                             <a href="/izin-keluar/{{ str_replace('/', '-', $izin->kode_izin) }}/edit"
                                                                 class="btn btn-primary m-1">Approve</a>
                                                         @else
-                                                            <a href="/izin-keluar/{{ str_replace('/', '-', $izin->kode_izin) }}/edit"
-                                                                class="btn btn-primary m-1">Approve (HRGA)</a>
-                                                            <button class="btn btn-primary m-1 btn-approve"
-                                                                data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}"
-                                                                data-keterangan="{{ $izin->keterangan }}"
-                                                                data-keperluan="{{ $izin->keperluan }}">Approve
-                                                                (Satpam)
-                                                            </button>
-                                                            <form
-                                                                id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}"
-                                                                method="POST" action=" {{ url('/izin-keluar/') }}">
-                                                                @csrf
-                                                                <input type="hidden" name="is_approve" value="1">
-                                                                <input type="hidden" name="approve_mode" value="satpam">
-                                                                <input type="hidden" name="kode_izin"
-                                                                    value="{{ $izin->kode_izin }}">
-                                                            </form>
-                                                            @if ($izin->status === 'T2')
+                                                            @if ($izin->status === 'T1')
+                                                                <a href="/izin-keluar/{{ str_replace('/', '-', $izin->kode_izin) }}/edit"
+                                                                    class="btn btn-primary m-1">Approve (HRGA)</a>
+                                                            @elseif ($izin->status === 'T2')
+                                                                <button class="btn btn-primary m-1 btn-approve"
+                                                                    data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}"
+                                                                    data-keterangan="{{ $izin->keterangan }}"
+                                                                    data-keperluan="{{ $izin->keperluan }}">Approve</button>
+                                                                <form
+                                                                    id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}"
+                                                                    method="POST" action=" {{ url('/izin-keluar/') }}">
+                                                                    @csrf
+                                                                    <input type="hidden" name="is_approve"
+                                                                        value="1">
+                                                                    <input type="hidden" name="approve_mode"
+                                                                        value="satpam">
+                                                                    <input type="hidden" name="kode_izin"
+                                                                        value="{{ $izin->kode_izin }}">
+                                                                </form>
                                                                 <button class="btn btn-danger m-1 btn-reject"
                                                                     data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}"
                                                                     data-keterangan="{{ $izin->keterangan }}"
                                                                     data-keperluan="{{ $izin->keperluan }}">Tolak
-                                                                    (Satpam)</button>
+                                                                    (Satpam)
+                                                                </button>
                                                                 <form
                                                                     id="form-reject-izin-{{ str_replace('/', '-', $izin->kode_izin) }}"
                                                                     method="POST" action=" {{ url('/izin-keluar/') }}">
                                                                     @csrf
                                                                     <input type="hidden" name="is_approve"
                                                                         value="0">
+                                                                    <input type="hidden" name="approve_mode"
+                                                                        value="satpam">
+                                                                    <input type="hidden" name="kode_izin"
+                                                                        value="{{ $izin->kode_izin }}">
+                                                                </form>
+                                                            @elseif($izin->status === 'T3')
+                                                                <button class="btn btn-primary m-1 btn-approve"
+                                                                    data-kode="{{ str_replace('/', '-', $izin->kode_izin) }}"
+                                                                    data-keterangan="{{ $izin->keterangan }}"
+                                                                    data-keperluan="{{ $izin->keperluan }}">Approve
+                                                                    (Satpam)
+                                                                </button>
+                                                                <form
+                                                                    id="form-approve-izin-{{ str_replace('/', '-', $izin->kode_izin) }}"
+                                                                    method="POST" action=" {{ url('/izin-keluar/') }}">
+                                                                    @csrf
+                                                                    <input type="hidden" name="is_approve"
+                                                                        value="1">
                                                                     <input type="hidden" name="approve_mode"
                                                                         value="satpam">
                                                                     <input type="hidden" name="kode_izin"
