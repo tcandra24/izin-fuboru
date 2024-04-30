@@ -20,7 +20,7 @@ class IzinController extends Controller
             $keluarIzin = KeluarIzin::where('status', 'T1')->orderBy('create_date', 'DESC');
         } else {
             // Jabatan Admin
-            $keluarIzin = KeluarIzin::where('status', 'T1')->where('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC');
+            $keluarIzin = KeluarIzin::where('status', 'T1')->orWhere('status', 'T2')->orWhere('status', 'T3')->orderBy('create_date', 'DESC');
         }
 
         if(isset($request->start_date)){
